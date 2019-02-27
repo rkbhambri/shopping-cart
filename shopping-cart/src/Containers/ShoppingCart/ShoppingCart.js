@@ -10,16 +10,24 @@ class ShoppingCart extends Component {
     };
 
     checkoutCart = (itemData) => {
-        const index = this.state.checkoutCart.length > 0 && this.state.checkoutCart.findIndex(item => item.id !== itemData.id)
+        const index = this.state.checkoutCart.findIndex(item => item.id === itemData.id);
         if (index > -1) {
+            let checkoutCart = [...this.state.checkoutCart];
+            checkoutCart[index].quantity = checkoutCart[index].quantity + 1;
+            this.setState({
+                ...this.state,
+                checkoutCart
+            });
+        } else {
+            itemData = {
+                ...itemData,
+                quantity: 1
+            }
             this.setState({
                 ...this.state,
                 checkoutCart: this.state.checkoutCart.concat(itemData)
             });
-        } else {
-
         }
-
     };
     removeItemFromCart = (itemId) => {
         let checkoutCart = [...this.state.checkoutCart];
@@ -33,14 +41,13 @@ class ShoppingCart extends Component {
         });
     }
     render() {
-        console.log('this.state.checkoutCart===', this.state.checkoutCart)
         return (
             <div className="shopping-cart-wrapper">
                 <Checkout
                     checkoutCart={this.state.checkoutCart}
                     removeItemFromCart={(itemId) => this.removeItemFromCart(itemId)}
                 />
-                <Heading heading="Shopping Cart" />
+                <Heading heading="Shopping Cart" /><br />
                 <Products
                     checkoutCart={(itemData) => this.checkoutCart(itemData)}
                 />

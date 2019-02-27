@@ -24,6 +24,9 @@ const Checkout = (props) => {
                                     <div className="size">{item.availableSizes[0]} | </div>
                                     <div className="style">{item.style}</div>
                                 </div>
+                                <div className="quantity" style={{ paddingLeft: '3px' }}>
+                                    <b>Quantity</b> : {item.quantity}
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-3 text-right">
@@ -37,6 +40,16 @@ const Checkout = (props) => {
             })
         )
     }
+
+    let checkoutTotal = 0;
+
+    if (props.checkoutCart.length) {
+        props.checkoutCart.map(data => {
+            checkoutTotal = checkoutTotal + data.price;
+            return 1;
+        })
+    }
+
     return (
         <div className="checkout text-right border">
             <button type="button"
@@ -52,16 +65,21 @@ const Checkout = (props) => {
                             <button type="button" className="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div className="modal-body text-left">
-                            {items}
+                            {props.checkoutCart.length === 0 ? <h5>Your cart is empty</h5> : items}
                         </div>
                         <div className="modal-close p-2">
-                            <button type="button" className="btn btn-primary" data-dismiss="modal">Close</button>
+                            <div className="row">
+                                {props.checkoutCart.length > 0 && <div className="total col-md-3 pl-3">Total : {checkoutTotal}</div>}
+                                <div
+                                    className={props.checkoutCart.length > 0 ? "col-md-9 text-right" : "col-md-12 text-right"}>
+                                    <button type="button" className="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     );
 };
 
